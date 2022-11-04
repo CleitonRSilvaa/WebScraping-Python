@@ -17,18 +17,18 @@ import db_query
 import bot_telegran
 print("Processo de Dowload iniciado")
 
-def messagem_inicial():
+def mensagem_inicial():
     hora_inicial = datetime.now().strftime("%Y-%m-%d %H:%M")
     msg = 'Processo de download dos boletos iniciado em : \n' + hora_inicial
-    bot_telegran.send_message(msg=msg)
+    bot_telegran.send_mensage(msg=msg)
 
-def messagem_final():
+def mensagem_final():
     hora_final = datetime.now().strftime("%Y-%m-%d %H:%M")
     msg = 'Processo de download dos boletos finalizado em : \n' + hora_final + '\n' \
         'NÚMERO TOTAL DE BOLETOS : ' + str(len(lista_cpf)) + '\n' \
         'NÚMERO DE BOLETOS BAIXADOS : ' + cont_boletos_baixados() + '\n' \
         'NÚMERO DE SOCIO SEM BOLETO :' + cont_sem_boletos() + '\n'                                                                                                                                    'NÚMERO DE BOLETO PARA BAIXAR NOVAMENTE :' + cont_boletos_para_baixar() + '\n'
-    bot_telegran.send_message(msg=msg)
+    bot_telegran.send_mensage(msg=msg)
 
 
 def cont_boletos_baixados():
@@ -119,14 +119,14 @@ def download_boletos(cpf):
         browser.close()
 
 def main(lista_cpf_obj):
-    messagem_inicial()
+    mensagem_inicial()
     arquivo = open("cpfs.txt", 'a')
     arquivo.write(datetime.now().strftime("%Y-%m-%d %H:%M") + '\n')
     arquivo = open("sem_boleto.txt", 'a')
     arquivo.write(datetime.now().strftime("%Y-%m-%d %H:%M") + '\n')
     for cpf in lista_cpf_obj:
         download_boletos(cpf)
-    messagem_final()
+    mensagem_final()
 # cria nova lista com cpfs de boletos com erro de donload
 def lista_cpf_2via(arquivo_lista):
     array_cpf = []
@@ -143,7 +143,7 @@ def cpf_obj (lista_cpf):
 
 def etapa_2():
     msg = 'Processo de download 2ª etapa iniciado em : \n' + datetime.now().strftime("%Y-%m-%d %H:%M")
-    bot_telegran.send_message(msg=msg)
+    bot_telegran.send_mensage(msg=msg)
     # cria um arquivo txt caso não exista
     lista_cpf_nao_baixados = open("baixar_novamente.txt", 'a')
     lista_cpf_nao_baixados.close()
@@ -157,7 +157,7 @@ def etapa_2():
         if download_boletos(cpf):
             new_lista_cpf.remove(cpf)
     msg = 'Processo de download 2ª etapa finalizado em : \n' + datetime.now().strftime("%Y-%m-%d %H:%M")
-    bot_telegran.send_message(msg=msg)
+    bot_telegran.send_mensage(msg=msg)
 
 
 
@@ -169,14 +169,9 @@ Primeira etapa iniciara o processo padrão do download dos boletos percorrendo u
 boleto_destino = r'./boletos'
 #Criar diretorio boleto_destino caso não exita
 if not os.path.exists(boleto_destino):
-        os.mkdir(boleto_destino)
+         os.mkdir(boleto_destino)
 # lista cpfs direto do banco de dados
 lista_cpf = db_query.list_cpf()
-
-print("instalando dependencias aguarde...")
-print(subprocess.run("pip install pytest-playwright & playwright install & pip install pyodbc", shell=True))
-time.sleep(60)
-
 main(lista_cpf_obj=lista_cpf)
 
 """"
@@ -184,4 +179,3 @@ Segunda etapa iniciara o processo de downloads dos boletos que tiveram erro na p
 """
 
 etapa_2()
-
