@@ -19,7 +19,7 @@ def conexao_sql():
         return conection.cursor()
     except:
         msg = 'Erro ao conectar ao banco de dados: '
-        bot_telegran.send_message(msg=msg)
+        bot_telegran.send_mensage(msg=msg)
         return False
 
 

@@ -1,7 +1,7 @@
 import requests
 
 
-def send_message(msg):
+def send_mensage(msg):
     #chat id do grupo do telegram que irar rebecer as mensagens
     chat_id = 'seu_chat_id'
     # token do seu bot que esta no grupo relacinado ao chat_id acima
